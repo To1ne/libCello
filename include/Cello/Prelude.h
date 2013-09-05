@@ -308,6 +308,13 @@ class {
 
 double as_double(var obj);
 
+/** FromString - convert string to */
+
+class {
+  void (*from_string)(var, var);
+} FromString;
+
+void from_string(var self, var obj);
 
 /** With - perform command on exit/enter of block */
 

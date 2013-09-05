@@ -3,9 +3,12 @@
 #include "Cello/Type.h"
 #include "Cello/Bool.h"
 #include "Cello/Exception.h"
+#include "Cello/String.h"
 
 #include <math.h>
 #include <stdio.h>
+#include <errno.h>
+#include <limits.h>
 
 void add(var lhs, var rhs) {
   return type_class_method(type_of(lhs), Num, add, lhs, rhs);
@@ -41,6 +44,7 @@ var Int = methods {
   method(Int, Hash),
   method(Int, AsLong),
   method(Int, AsDouble),
+  method(Int, FromString),
   method(Int, Num),
   method(Int, Serialize),
   method(Int, Show),
@@ -70,11 +74,7 @@ var Int_Copy(var self) {
 var Int_Eq(var self, var other) {
   IntData* io = cast(self, Int);
   if (type_implements(type_of(other), AsLong)) {
-    var result = False;
-    try {
-      result = (var)(intptr_t)(io->value == as_long(other));
-    } catch (e) {}
-    return result;
+    return (var)(intptr_t)(io->value == as_long(other));
   } else {
     return False;
   }
@@ -142,6 +142,23 @@ long Int_AsLong(var self) {
 double Int_AsDouble(var self) {
   IntData* io = cast(self, Int);
   return io->value;
+}
+
+void Int_FromString(var self, var obj) {
+  IntData* io = cast(self, Int);
+  StringData* s = cast(obj, String);
+  char* p = NULL;
+  long value = 0;
+  errno = 0; // To distinguish success/failure after call
+  value = strtol(s->value, &p, 10);
+  if ( (errno == ERANGE && (value == LONG_MAX || value == LONG_MIN))
+      ||(errno != 0 && value == 0)) {
+    throw(FormatError, "Failed to represent String as Long");
+  }
+  if (p == s->value) {
+    throw(FormatError, "No digits were found");
+  }
+  io->value = value;
 }
 
 int Int_Show(var self, var output, int pos) {

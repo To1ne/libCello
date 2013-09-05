@@ -356,43 +356,61 @@ PT_SUITE(suite_data) {
     
   }
 
-  PT_TEST(test_string_as_long) {
-    var s0 = new(String, "1234");
-    var s1 = new(String, "0456");
-    var s2 = new(String, "987.65");
-    var s3 = new(String, "-67890");
-    var s4 = new(String, ":89");
-    var s5 = new(String, "");
+  PT_TEST(test_from_string) {
+     var s0 = new(String, "1234");
+     var s1 = new(String, "0456");
+     var s2 = new(String, "987.65");
+     var s3 = new(String, "-67890");
+     var s4 = new(String, ":89");
+     var s5 = new(String, "");
 
-    volatile bool reached4 = false;
-    volatile bool reached5 = false;
+     var i0 = new(Int, -1);
+     var i1 = new(Int, -1);
+     var i2 = new(Int, -1);
+     var i3 = new(Int, -1);
+     var i4 = new(Int, -1);
+     var i5 = new(Int, -1);
 
-    PT_ASSERT( as_long(s0) is 1234 );
-    PT_ASSERT( as_long(s1) is 456 );
-    PT_ASSERT( as_long(s2) is 987 );   
-    PT_ASSERT( as_long(s3) is -67890 );
+     volatile bool reached4 = false;
+     volatile bool reached5 = false;
 
-    try {
-      long i = as_long(s4);
-    } catch (e) {
-      reached4 = true;
-    }
+     from_string(i0, s0);
+     from_string(i1, s1);
+     from_string(i2, s2);
+     from_string(i3, s3);
 
-    try {
-      long i = as_long(s5);
-    } catch (e) {
-      reached5 = true;
-    }
+     PT_ASSERT( as_long(i0) is 1234 );
+     PT_ASSERT( as_long(i1) is 456 );
+     PT_ASSERT( as_long(i2) is 987 );
+     PT_ASSERT( as_long(i3) is -67890 );
 
-    PT_ASSERT( reached4 );
-    PT_ASSERT( reached5 );
+     try {
+       from_string(i4, s4);
+     } catch (e) {
+       reached4 = true;
+     }
 
-    delete(s0);
-    delete(s1);
-    delete(s2);
-    delete(s3);
-    delete(s4);
-    delete(s5);
+     try {
+       from_string(i5, s5);
+     } catch (e) {
+       reached5 = true;
+     }
+
+     PT_ASSERT( reached4 );
+     PT_ASSERT( reached5 );
+
+     delete(i0);
+     delete(i1);
+     delete(i2);
+     delete(i3);
+     delete(i4);
+     delete(i5);
+     delete(s0);
+     delete(s1);
+     delete(s2);
+     delete(s3);
+     delete(s4);
+     delete(s5);
   }
 
   PT_TEST(test_array_create) {

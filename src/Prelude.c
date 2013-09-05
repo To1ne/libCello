@@ -285,6 +285,10 @@ double as_double(var self) {
   return type_class_method(type_of(self), AsDouble, as_double, self);
 }
 
+void from_string(var self, var obj) {
+  type_class_method(type_of(self), FromString, from_string, self, obj);
+}
+
 var stream_open(var self, const char* name, const char* access) {
   return type_class_method(type_of(self), Stream, stream_open, self, name, access);
 }

@@ -58,6 +58,8 @@ void Int_Abs(var self);
 long Int_AsLong(var self);
 double Int_AsDouble(var self);
 
+void Int_FromString(var self, var obj);
+
 void Int_Serial_Read(var self, var input);
 void Int_Serial_Write(var self, var output);
 
@@ -72,6 +74,7 @@ instance(Int, Ord) = { Int_Gt, Int_Lt };
 instance(Int, Hash) = { Int_Hash };
 instance(Int, AsLong) = { Int_AsLong };
 instance(Int, AsDouble) = { Int_AsDouble };
+instance(Int, FromString) = { Int_FromString };
 instance(Int, Num) = { Int_Add, Int_Sub, Int_Mul, Int_Div, Int_Neg, Int_Abs };
 instance(Int, Serialize) = { Int_Serial_Read, Int_Serial_Write };
 instance(Int, Show) = { Int_Show, Int_Look };
